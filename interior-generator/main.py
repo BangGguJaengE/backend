@@ -6,9 +6,6 @@ from interior_key import INTERIOR_KEY
 import ast
 
 
-
-
-
 def generate_interior_image(url: str, prompt: str):
     payload = json.dumps({
         "key": INTERIOR_KEY,
@@ -28,7 +25,7 @@ def generate_interior_image(url: str, prompt: str):
     if res.status_code == 200:
         return (res.json())["output"][0]
     
-def generate_interior_class(interior_img_url : str, ):
+def generate_interior_class(interior_img_url : str):
     client = OpenAI(api_key=OPENAI_KEY)
     
     interior_class_generator = """
@@ -36,10 +33,10 @@ def generate_interior_class(interior_img_url : str, ):
     - 당신은 가구 전문 이미지 라벨러 입니다. 
 
     ### Objective
-    - 가구 이미지를 보고 라벨을 python dictionary 형식으로 반환해주세요. 
+    - 가구 이미지를 보고 라벨을 Example 과 같은 형식으로 반환해주세요. 
 
     ### Example
-    output : {"class" : "침대", "color" : "화이트", "material" : "우드", "size" : "싱글", "shape" :"원형"}
+    output : {"class" : "소파", "color" : "블랙", "material" : "우드", "size" : "None", "shape" :"원형"}
 
     ### Information
     - 가구의 class는 "침대, 책상, 의자, 소파, 커튼, 서랍장, 식물" 중 하나 입니다.
@@ -69,7 +66,7 @@ def generate_interior_class(interior_img_url : str, ):
             max_tokens=300,
         )
 
-        return response.choices[0]
+        return response.choices[0].message.content
     
     except Exception as e:
         return f"An error occurred: {e}"
@@ -111,12 +108,16 @@ def generate_style_prompt(user_prompt: str):
     
 if __name__ == "__main__":
     
-    interior_url = "https://modelslab.com/api/v5/interior"
-    image_url = "https://storage.googleapis.com/bbangggujipggu/user_interior/2024-07-27T19-58-56-638412uni.jpeg"
-    user_prompt = "집이 너무 오래돼서 세련된 느끼으로 꾸미고 싶어. 모던한 느낌으로 해줘. 나는 mordern 한 스타일을 원해."
-    style_dict = generate_style_prompt(user_prompt)
-    print(style_dict)
-    style_prompt = ast.literal_eval(style_dict)["style_prompt"]
-    print(style_prompt)
-    output_url = generate_interior_image(image_url, style_prompt)
-    print(output_url)
+    # interior_url = "https://modelslab.com/api/v5/interior"
+    # image_url = "https://storage.googleapis.com/bbangggujipggu/user_interior/2024-07-27T19-58-56-638412uni.jpeg"
+    # user_prompt = "집이 너무 오래돼서 세련된 느끼으로 꾸미고 싶어. 모던한 느낌으로 해줘. 나는 mordern 한 스타일을 원해."
+    # style_dict = generate_style_prompt(user_prompt)
+    # print(style_dict)
+    # style_prompt = ast.literal_eval(style_dict)["style_prompt"]
+    # print(style_prompt)
+    # output_url = generate_interior_image(image_url, style_prompt)
+    # print(output_url)
+    object_url = "https://raw.githubusercontent.com/BangGguJaengE/backend/main/interior-generator/data/bed.png"
+    interior_dict_str = generate_interior_class(object_url)
+    interior_dict = ast.literal_eval(interior_dict_str)
+    print(interior_dict)
