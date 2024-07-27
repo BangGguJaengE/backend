@@ -13,6 +13,7 @@ sqlalchemy = "^2.0.31"
 python-dotenv = "^1.0.1"
 google-cloud-vision = "^3.7.3"
 xmltodict = "^0.13.0"
+openai = "^1.37.1"
 
 
 [build-system]

@@ -73,5 +73,3 @@ if __name__ == "__main__":
     print(style_prompt)
     output_url = generate_interior_image(image_url, style_prompt)
     print(output_url)
-  
-  
