@@ -22,3 +22,9 @@ async def generate_interior(body: str = Form(...), file: UploadFile = File(...))
     res = await generate_interior_image(url, prompt.prompt)
 
     return res
+
+@router.post("/gcp")
+async def upload_image(file: UploadFile = File(...)):
+    url = await upload_image_to_gcs(file)
+
+    return url["url"]
