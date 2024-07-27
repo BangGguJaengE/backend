@@ -79,9 +79,3 @@ async def generate_interior_image(url: str, prompt: str):
     raise HTTPException(status_code=400, detail="Something Wrong")
     
 
-
-
-# 세련된
-# 사용자 프롬프트
-
-# openai

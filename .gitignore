@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 key.txt
+interior_key.txt
+openai_key.txt
+openai_key.py
+interior_key.py
 
 # C extensions
 *.so
