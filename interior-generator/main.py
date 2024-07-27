@@ -8,6 +8,7 @@ import ast
 
 
 
+
 def generate_interior_image(url: str, prompt: str):
     payload = json.dumps({
         "key": INTERIOR_KEY,
@@ -26,6 +27,52 @@ def generate_interior_image(url: str, prompt: str):
     
     if res.status_code == 200:
         return (res.json())["output"][0]
+    
+def generate_interior_class(interior_img_url : str, ):
+    client = OpenAI(api_key=OPENAI_KEY)
+    
+    interior_class_generator = """
+    ### Role
+    - 당신은 가구 전문 이미지 라벨러 입니다. 
+
+    ### Objective
+    - 가구 이미지를 보고 라벨을 python dictionary 형식으로 반환해주세요. 
+
+    ### Example
+    output : {"class" : "침대", "color" : "화이트", "material" : "우드", "size" : "싱글", "shape" :"원형"}
+
+    ### Information
+    - 가구의 class는 "침대, 책상, 의자, 소파, 커튼, 서랍장, 식물" 중 하나 입니다.
+    - 가구가 침대인 경우 size 는 "싱글, 퀸, 킹" 중 하나입니다.
+    - 가구가 서랍장인 경우 size는 "1단, 2단, 3단" 중 하나입니다.
+    - 가구가 소파인 경우 size는 "1인용, 2인용, 패밀리" 중 하나입니다.
+    - size와 shape는 식별하기 어려운 경우 "None" 으로 작성하세요.
+    """
+    
+    try : 
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": interior_class_generator},
+                    {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": interior_img_url
+                    },
+                    },
+                ],
+                }
+            ],
+            max_tokens=300,
+        )
+
+        return response.choices[0]
+    
+    except Exception as e:
+        return f"An error occurred: {e}"
     
 def generate_style_prompt(user_prompt: str):
     client = OpenAI(api_key=OPENAI_KEY)
@@ -50,11 +97,11 @@ def generate_style_prompt(user_prompt: str):
     
     try:
         response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": style_prompt_generator},
-            {"role": "user", "content": user_prompt}
-        ]
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": style_prompt_generator},
+                {"role": "user", "content": user_prompt}
+            ]
         )
         return response.choices[0].message.content
     except Exception as e:
