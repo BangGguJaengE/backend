@@ -1,10 +1,6 @@
-from fastapi import APIRouter
-from src.services.test import run_quickstart
+from fastapi import APIRouter, File, UploadFile
+from src.routers.interior_router import interior_router
 
 index_router = router = APIRouter()    
 
-@router.get("/test")
-async def test():
-    label = run_quickstart()
-
-    return label
+index_router.include_router(interior_router, prefix="/interior")
