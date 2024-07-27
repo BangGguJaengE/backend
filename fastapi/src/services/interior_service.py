@@ -72,7 +72,7 @@ async def generate_interior_image(url: str, prompt: str):
     }
 
     res = requests.post(interior_url, headers=headers, data=payload)
-    
+
     if res.status_code == 200:
         return (res.json())["output"][0]
     
