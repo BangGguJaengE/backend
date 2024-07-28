@@ -50,7 +50,7 @@ if __name__ == "__main__":
     # Object detection image
     # image_path = "C:/취업준비/경진대회/새싹해커톤/이미지/생성된이미지.png"  # 이미지 파일 경로 설정
     image_url = 'https://cdn.ggumim.co.kr/cache/star/600/20160703033324R0baDhy8yK.png'
-    api_key = "AIzaSyAMhzr2qmLoBugV6tUCSN_MCz9BXQonAME"  # 발급받은 API 키 입력
+    api_key = os.getenv("GOOGLE_API_KEY")  # 발급받은 API 키 입력
     # Similarity check images
     folder_path = "C:/취업준비/경진대회/새싹해커톤/이미지/이미지사진"  # 비교할 이미지들이 있는 폴더 경로
     # Path to save the most similar images
