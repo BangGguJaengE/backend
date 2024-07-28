@@ -12,8 +12,13 @@ fastapi = "^0.111.1"
 sqlalchemy = "^2.0.31"
 python-dotenv = "^1.0.1"
 google-cloud-vision = "^3.7.3"
+google-cloud-storage = "^2.18.0"
+pillow = "^10.4.0"
 xmltodict = "^0.13.0"
 openai = "^1.37.1"
+numpy = "^2.0.1"
+scikit-image = "^0.24.0"
+
 
 
 [build-system]

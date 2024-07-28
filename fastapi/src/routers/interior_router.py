@@ -28,3 +28,7 @@ async def upload_image(file: UploadFile = File(...)):
     url = await upload_image_to_gcs(file)
 
     return url["url"]
+
+@router.get("/test")
+async def test():
+    return await detect_obj_and_search()

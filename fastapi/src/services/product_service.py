@@ -2,6 +2,9 @@ from fastapi import HTTPException
 import xmltodict
 import requests
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 eleven_api_key = os.getenv("ELEVEN_API_KEY")
 eleven_url = os.getenv("ELEVEN_URL")
@@ -23,7 +26,7 @@ async def get_product_from_eleven(keyword: str, page_num: int, page_size: int):
     
     raise HTTPException(status_code=400, detail="Something wrong")
 
-async def get_product_from_naver_shopping(keyword: str, page_num: int, page_size: int):
+async def get_product_from_naver_shopping(keyword: str, page_num: int, page_size: int, category: str = None):
 
     url = f"{naver_shopping_url}?query={keyword}&start={page_num}&display={page_size}&exclude=rental:cbshop"
 
@@ -35,12 +38,43 @@ async def get_product_from_naver_shopping(keyword: str, page_num: int, page_size
     if res.status_code == 200:
         product_search_respnose = res.json()
         products = product_search_respnose["items"]
-        # a = list(filter(lambda x: x["category3"] == "침대", products))
-        # print(a)
-        return products
+        
+        if category == None:
+            return products
+
+        filtered_products = get_filtered_products(products, category)
+
+        return filtered_products
     
     raise HTTPException(status_code=400, detail="Something wrong")
 
 # category4 : 사무용의자, 
-# category3 : 침대, 에어컨, 책상, 의자, 식탁/의자, 소파
+# category3 : 침대, 책상, 의자, 식탁/의자, 소파, 서랍장, 조명
 # category2 : 원예/식물, 커튼/블라인드, 
+
+def get_filtered_products(products: list, category: str):
+    if category == "침대":
+        return list(filter(lambda x: x["category3"] == "침대", products))
+    
+    if category == "책상":
+        return list(filter(lambda x: x["category3"] == "책상", products))
+
+    if category == "의자":
+        return list(filter(lambda x: x["category3"] == "의자" or x["category4"] == "사무용의자" or x["category3"] == "식탁/의자", products))
+    
+    if category == "소파":
+        return list(filter(lambda x: x["category3"] == "소파", products))
+    
+    if category == "커튼":
+        return list(filter(lambda x: x["category2"] == "커튼/블라인드", products))
+    
+    if category == "서랍장":
+        return list(filter(lambda x: x["category3"] == "서랍장", products))
+
+    if category == "식물":
+        return list(filter(lambda x: x["category2"] == "원예/식물", products))
+
+    if category == "조명":
+        return list(filter(lambda x: x["category3"] == "조명", products))
+
+    return products
