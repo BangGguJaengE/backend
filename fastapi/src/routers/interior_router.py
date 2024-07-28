@@ -23,7 +23,7 @@ async def generate_interior(body: str = Form(...), file: UploadFile = File(...))
 
     res = await detect_obj_and_search(gen_image_url)
 
-    return res
+    return {"generatedImageUrl": gen_image_url, "result": res}
 
 @router.post("/gcp")
 async def upload_image(file: UploadFile = File(...)):
