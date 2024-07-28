@@ -19,7 +19,9 @@ async def generate_interior(body: str = Form(...), file: UploadFile = File(...))
 
     print(prompt.prompt)
 
-    res = await generate_interior_image(url, prompt.prompt)
+    gen_image_url = await generate_interior_image(url, prompt.prompt)
+
+    res = await detect_obj_and_search(gen_image_url)
 
     return res
 
@@ -29,6 +31,6 @@ async def upload_image(file: UploadFile = File(...)):
 
     return url["url"]
 
-@router.get("/test")
-async def test():
-    return await detect_obj_and_search()
+# @router.get("/test")
+# async def test():
+#     return await detect_obj_and_search()

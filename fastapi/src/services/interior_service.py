@@ -10,6 +10,7 @@ import os
 import ast
 from fastapi import HTTPException, UploadFile
 import requests
+from src.google.object_detection import ObjectDetection
 
 from src.mock.object_detection import mock_object_detection
 from src.services.product_service import get_product_from_naver_shopping
@@ -25,10 +26,18 @@ interior_api_key = os.getenv("INTERIOR_API_KEY")
 
 open_ai_key = os.getenv("OPENAI_KEY")
 
-async def detect_obj_and_search():
-    res = []
+async def detect_obj_and_search(image_url):
+    print("image url")
+    print(image_url)
+
     
-    dic_list = mock_object_detection()
+    dic_list = ObjectDetection.detect_objects(image_url)
+
+    print("dic list")
+    print(dic_list)
+
+
+    # dic_list = mock_object_detection()
 
     # Object Detection 된 이미지를 gcp에 업로드
     for dic in dic_list:
@@ -68,13 +77,8 @@ async def detect_obj_and_search():
         dic["label"] = interior_dict["class"]
         dic["items"] = items
         del dic["image"]
+        del dic["bounding_box"]
         
-        
-    print()
-    print()
-    print()
-    print()
-    print("dic list")
     for i in dic_list:
         print()
         print("dict list")
@@ -152,9 +156,6 @@ async def upload_image_to_gcs(file: UploadFile):
 async def generate_interior_image(url: str, prompt: str):
     style_dict = generate_style_prompt(prompt)
 
-    print("style dict")
-    print(style_dict)
-    
     try:
         styled_prompt = ast.literal_eval(style_dict)["style_prompt"]
     except Exception as e:
@@ -177,7 +178,7 @@ async def generate_interior_image(url: str, prompt: str):
     res = requests.post(interior_url, headers=headers, data=payload)
 
     if res.status_code == 200:
-        print(res.json())
+
         return (res.json())["output"][0]
     
     raise HTTPException(status_code=400, detail="Something Wrong")
@@ -228,7 +229,7 @@ def generate_interior_class(interior_img_url : str):
     output : {"class" : "소파", "color" : "블랙", "material" : "우드", "size" : "None", "shape" :"원형"}
 
     ### Information
-    - 가구의 class는 "침대, 책상, 의자, 소파, 커튼, 서랍장, 식물" 중 하나 입니다.
+    - 가구의 class는 "침대, 책상, 의자, 소파, 커튼, 서랍장, 식물, 조명, 베개" 중 하나 입니다.
     - 가구가 침대인 경우 size 는 "싱글, 퀸, 킹" 중 하나입니다.
     - 가구가 서랍장인 경우 size는 "1단, 2단, 3단" 중 하나입니다.
     - 가구가 소파인 경우 size는 "1인용, 2인용, 패밀리" 중 하나입니다.

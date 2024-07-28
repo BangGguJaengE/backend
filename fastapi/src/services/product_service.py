@@ -50,7 +50,7 @@ async def get_product_from_naver_shopping(keyword: str, page_num: int, page_size
 
 # category4 : 사무용의자, 
 # category3 : 침대, 책상, 의자, 식탁/의자, 소파, 서랍장, 조명
-# category2 : 원예/식물, 커튼/블라인드, 
+# category2 : 원예/식물, 커튼/블라인드, 베개
 
 def get_filtered_products(products: list, category: str):
     if category == "침대":
@@ -76,5 +76,8 @@ def get_filtered_products(products: list, category: str):
 
     if category == "조명":
         return list(filter(lambda x: x["category3"] == "조명", products))
+    
+    if category == "베개":
+        return list(filter(lambda x: x["category2"] == "베개", products))
 
     return products
