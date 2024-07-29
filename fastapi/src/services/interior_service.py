@@ -111,7 +111,6 @@ async def upload_url_image_to_gcs(image_url: str):
 
         blob.make_public()
 
-
         gs_url = f"gs://{bucket_name}/{filename}"
 
         return {"url": blob.public_url, "gs_url": gs_url}
