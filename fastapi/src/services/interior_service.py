@@ -107,13 +107,10 @@ async def upload_url_image_to_gcs(image_url: str):
     blob = bucket.blob(filename)
 
     try:
-        print("hi")
         blob.upload_from_file(image_data, content_type="image/png")
 
-        print("hello")
         blob.make_public()
 
-        print("bye")
 
         gs_url = f"gs://{bucket_name}/{filename}"
 
