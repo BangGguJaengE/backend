@@ -86,6 +86,44 @@ async def detect_obj_and_search(image_url):
 
     return dic_list
 
+async def upload_url_image_to_gcs(image_url: str):
+
+    gen_image_res = requests.get(image_url)
+
+    gen_image_res.raise_for_status()
+
+    image_data = io.BytesIO(gen_image_res.content)
+
+    client = storage.Client(credentials=credential)
+
+    bucket_name = os.getenv("GCS_BUCKET_NAME")
+
+    bucket = client.get_bucket(bucket_name)
+
+    date = datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S-%f")
+
+    filename = f"generated_image/{date}-{image_url}"
+
+    blob = bucket.blob(filename)
+
+    try:
+        print("hi")
+        blob.upload_from_file(image_data, content_type="image/png")
+
+        print("hello")
+        blob.make_public()
+
+        print("bye")
+
+        gs_url = f"gs://{bucket_name}/{filename}"
+
+        return {"url": blob.public_url, "gs_url": gs_url}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Image upload failed: {e}")
+    
+
+
 async def upload_byte_image_to_gcs(image: io.BytesIO, label: str):
 
     content_type = "image/png"
@@ -107,7 +145,7 @@ async def upload_byte_image_to_gcs(image: io.BytesIO, label: str):
 
         blob.make_public()
 
-        gs_url = f"gs://{bucket_name}/detected_object/{filename}"
+        gs_url = f"gs://{bucket_name}/{filename}"
 
         return {"url": blob.public_url, "gs_url": gs_url}
     
