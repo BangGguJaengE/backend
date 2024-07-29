@@ -102,7 +102,7 @@ async def upload_url_image_to_gcs(image_url: str):
 
     date = datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S-%f")
 
-    filename = f"generated_image/{date}-{image_url}"
+    filename = f"generated_image/{date}"
 
     blob = bucket.blob(filename)
 
