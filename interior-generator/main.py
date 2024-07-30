@@ -110,22 +110,22 @@ def generate_style_prompt(user_prompt: str):
     
 if __name__ == "__main__":
     
-    # style prompt generation
-    interior_url = "https://modelslab.com/api/v5/interior"
-    image_url = "https://storage.googleapis.com/bbangggujipggu/user_interior/2024-07-27T19-58-56-638412uni.jpeg"
-    user_prompt = "집이 너무 오래돼서 세련된 느낌으로 꾸미고 싶어. 모던한 느낌으로 해줘. 나는 mordern 한 스타일을 원해."
-    style_dict = generate_style_prompt(user_prompt)
-    print(style_dict)
-    style_prompt = ast.literal_eval(style_dict)["style_prompt"]
-    # style_prompt = "interior 3d render coastal style, with white walls, where the ceiling is curved, kitchen only with bottom cabinets, cabinets of light wood color. There's also a kitchen island with a golden faucet and in front a large white table with wodden chairs with two black bowls on the top. The sun is almost rising"
-    print(style_prompt)
+    # # style prompt generation
+    # interior_url = "https://modelslab.com/api/v5/interior"
+    # image_url = "https://storage.googleapis.com/bbangggujipggu/user_interior/2024-07-27T19-58-56-638412uni.jpeg"
+    # user_prompt = "집이 너무 오래돼서 세련된 느낌으로 꾸미고 싶어. 모던한 느낌으로 해줘. 나는 mordern 한 스타일을 원해."
+    # style_dict = generate_style_prompt(user_prompt)
+    # print(style_dict)
+    # style_prompt = ast.literal_eval(style_dict)["style_prompt"]
+    # # style_prompt = "interior 3d render coastal style, with white walls, where the ceiling is curved, kitchen only with bottom cabinets, cabinets of light wood color. There's also a kitchen island with a golden faucet and in front a large white table with wodden chairs with two black bowls on the top. The sun is almost rising"
+    # print(style_prompt)
     
-    # image generation
-    output_url = generate_interior_image(image_url, style_prompt)
-    print(output_url)
+    # # image generation
+    # output_url = generate_interior_image(image_url, style_prompt)
+    # print(output_url)
     
     # style class generation
-    # object_url = "https://raw.githubusercontent.com/BangGguJaengE/backend/main/interior-generator/data/bed.png"
-    # interior_dict_str = generate_interior_class(object_url)
-    # interior_dict = ast.literal_eval(interior_dict_str)
-    # print(interior_dict)
+    object_url = "https://raw.githubusercontent.com/BangGguJaengE/backend/main/interior-generator/data/bed.png"
+    interior_dict_str = generate_interior_class(object_url)
+    interior_dict = ast.literal_eval(interior_dict_str)
+    print(interior_dict)
