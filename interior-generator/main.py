@@ -11,7 +11,7 @@ def generate_interior_image(url: str, prompt: str):
         "key": INTERIOR_KEY,
         "init_image" : url,
         "prompt" : prompt,
-        "num_inference_steps" : 21,
+        "num_inference_steps" : 31,
         "base64" : "no",
         "guidance_scale" : 7,
     })
@@ -84,12 +84,14 @@ def generate_style_prompt(user_prompt: str):
 
     ### Example
     user_input : 요즘따라 너무 우울한데, 기분전환하고 싶어. 나는 cozy 한 스타일을 원해.
-    output : {"style_prompt" : "A cozy bright room, shiny, yellow mood, 4k, photorealistic", "reason" : "우울할 때는 밝은 방에서 따사로운 햇살을 받으며 기분전환을 하면 도움이 됩니다. 활기찬 노란색 가구를 구매해보시면 어떨까요?"}
+    output : {"style_prompt" : "A cozy bright room, shiny, yellow mood, 4k, photorealistic, masterpiece, super realistic, best quality, raw photo", "reason" : "우울할 때는 밝은 방에서 따사로운 햇살을 받으며 기분전환을 하면 도움이 됩니다. 활기찬 노란색 가구를 구매해보시면 어떨까요?"}
 
     usesr_input : 멋진 방. 나는 modern 한 스타일을 원해.
-    output: {"style_prompt": "A modern room, black mood, 4k, photorealistic", "reason" : "모던함과 멋짐이라는 단어에는 검정색이 잘 어울려요. 깊이있는 방의 분위기를 만들어보세요!"}
+    output: {"style_prompt": "A modern room, black mood, 4k, photorealistic, masterpiece, super realistic, best quality, raw photo", "reason" : "모던함과 멋짐이라는 단어에는 검정색이 잘 어울려요. 깊이있는 방의 분위기를 만들어보세요!"}
 
-        
+    ### Information
+    - 창문의 크기는 변하면 안됩니다. 그 밖에도 현실적인 스타일 프롬프트를 작성하세요.
+    - 
     """
     
     try:
@@ -108,16 +110,22 @@ def generate_style_prompt(user_prompt: str):
     
 if __name__ == "__main__":
     
-    # interior_url = "https://modelslab.com/api/v5/interior"
-    # image_url = "https://storage.googleapis.com/bbangggujipggu/user_interior/2024-07-27T19-58-56-638412uni.jpeg"
-    # user_prompt = "집이 너무 오래돼서 세련된 느끼으로 꾸미고 싶어. 모던한 느낌으로 해줘. 나는 mordern 한 스타일을 원해."
-    # style_dict = generate_style_prompt(user_prompt)
-    # print(style_dict)
-    # style_prompt = ast.literal_eval(style_dict)["style_prompt"]
-    # print(style_prompt)
-    # output_url = generate_interior_image(image_url, style_prompt)
-    # print(output_url)
-    object_url = "https://raw.githubusercontent.com/BangGguJaengE/backend/main/interior-generator/data/bed.png"
-    interior_dict_str = generate_interior_class(object_url)
-    interior_dict = ast.literal_eval(interior_dict_str)
-    print(interior_dict)
+    # style prompt generation
+    interior_url = "https://modelslab.com/api/v5/interior"
+    image_url = "https://storage.googleapis.com/bbangggujipggu/user_interior/2024-07-27T19-58-56-638412uni.jpeg"
+    user_prompt = "집이 너무 오래돼서 세련된 느낌으로 꾸미고 싶어. 모던한 느낌으로 해줘. 나는 mordern 한 스타일을 원해."
+    style_dict = generate_style_prompt(user_prompt)
+    print(style_dict)
+    style_prompt = ast.literal_eval(style_dict)["style_prompt"]
+    # style_prompt = "interior 3d render coastal style, with white walls, where the ceiling is curved, kitchen only with bottom cabinets, cabinets of light wood color. There's also a kitchen island with a golden faucet and in front a large white table with wodden chairs with two black bowls on the top. The sun is almost rising"
+    print(style_prompt)
+    
+    # image generation
+    output_url = generate_interior_image(image_url, style_prompt)
+    print(output_url)
+    
+    # style class generation
+    # object_url = "https://raw.githubusercontent.com/BangGguJaengE/backend/main/interior-generator/data/bed.png"
+    # interior_dict_str = generate_interior_class(object_url)
+    # interior_dict = ast.literal_eval(interior_dict_str)
+    # print(interior_dict)
