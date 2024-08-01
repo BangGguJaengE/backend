@@ -48,7 +48,7 @@ class ObjectDetection:
             
             combined_results = []
             
-            label_list = ['bed', 'Table', 'Desk',  'Houseplant', 'Lighting', 'Couch', 'Chair', 'Wardrobe',
+            label_list = ['Bed', 'Table', 'Desk',  'Houseplant', 'Lighting', 'Couch', 'Chair', 'Wardrobe', 'Chandelier', 'Lamp',
                             'Chest of drawers', 'Filing cabinet', 'Pillow', 'Light fixture', 'Window blind']
 
             for obj in objects:
@@ -61,6 +61,7 @@ class ObjectDetection:
                     box[2]['x'] * img.width,
                     box[2]['y'] * img.height
                 )
+                print('test', obj['name'])
                 if obj['name'] in label_list:
                     cropped_image = img.crop(bbox)
                     combined_results.append({

@@ -29,7 +29,6 @@ open_ai_key = os.getenv("OPENAI_KEY")
 async def detect_obj_and_search(image_url):
     print("image url")
     print(image_url)
-
     
     dic_list = ObjectDetection.detect_objects(image_url)
 
@@ -63,7 +62,13 @@ async def detect_obj_and_search(image_url):
 
         shape = "" if interior_dict["shape"] == "None" else f" {interior_dict["shape"]}"
 
-        keyword = f"{size}{shape} {interior_dict["color"]} {interior_dict["material"]} {interior_dict["class"]}"
+        color = "" if interior_dict["color"] == "None" else f" {interior_dict["color"]}"
+
+        meterial = "" if interior_dict["material"] == "None" else f" {interior_dict["material"]}"
+
+        classes = "" if interior_dict["class"] == "None" else f" {interior_dict["class"]}"
+
+        keyword = f"{size}{shape} {color} {meterial} {classes}"
 
         print(f"search keyword : {keyword}")
         print(f"class : {interior_dict["class"]}")
@@ -188,6 +193,7 @@ async def upload_image_to_gcs(file: UploadFile):
         raise HTTPException(status_code=500, detail=f"Image upload failed: {e}")
     
 async def generate_interior_image(url: str, prompt: str):
+
     style_dict = generate_style_prompt(prompt)
 
     try:
