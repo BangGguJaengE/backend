@@ -227,7 +227,6 @@ def generate_style_prompt(user_prompt: str):
     client = OpenAI(api_key=open_ai_key)
 
     style_prompt_generator = """
-    
     ### Role
     - 당신은 stable diffusion prompt engineer 입니다. 고품질의 이미지 결과를 위한 프롬프트 작성법을 잘 알고 있습니다.
 
@@ -236,11 +235,19 @@ def generate_style_prompt(user_prompt: str):
 
     ### Example
     user_input : 요즘따라 너무 우울한데, 기분전환하고 싶어. 나는 cozy 한 스타일을 원해.
-    output : {"style_prompt" : "A cozy bright room, shiny, yellow mood, 4k, photorealistic", "reason" : "우울할 때는 밝은 방에서 따사로운 햇살을 받으며 기분전환을 하면 도움이 됩니다. 활기찬 노란색 가구를 구매해보시면 어떨까요?"}
+    output : {"style_prompt" : "A cozy bright room, shiny, yellow mood, 4k, photorealistic, masterpiece, super realistic, best quality, raw photo", "reason" : "우울할 때는 밝은 방에서 따사로운 햇살을 받으며 기분전환을 하면 도움이 됩니다. 활기찬 노란색 가구를 구매해보시면 어떨까요?"}
 
     usesr_input : 멋진 방. 나는 modern 한 스타일을 원해.
-    output: {"style_prompt": "A modern room, black mood, 4k, photorealistic", "reason" : "모던함과 멋짐이라는 단어에는 검정색이 잘 어울려요. 깊이있는 방의 분위기를 만들어보세요!"}
+    output: {"style_prompt": "A modern room, black mood, 4k, photorealistic, masterpiece, super realistic, best quality, raw photo", "reason" : "모던함과 멋짐이라는 단어에는 검정색이 잘 어울려요. 깊이있는 방의 분위기를 만들어보세요!"}
 
+    ### Information
+    - 창문에 관련된 내용은 넣지 마세요. 그 밖에도 현실적인 스타일 프롬프트를 작성하세요.
+    - 사용자의 입력 중 우울함, 슬픔, 스트레스 중 하나로 보이는 경우, 이를 완화할 수 있도록 아래 매핑 정보를 활용하세요.
+        - 우울감 : combination of warm white light with blue–yellow or green–yellow light
+        - 슬픔 : warm white light
+        - 스트레스 : cool white light and blue-green light
+    - colorful 스타일을 원하는 경우, colorful 라는 단어는 절대 넣지 말고, green sofa 혹은 pink chair 같이 특정 가구나 소품에만 색깔 포인트를 넣어주세요.
+    - planterior 스타일을 원하는 경우, planterior 라는 단어는 절대 넣지 말고, with 1 minimal plants 만 추가해주세요.
     """
     
     try:
