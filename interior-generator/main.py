@@ -21,6 +21,7 @@ def generate_interior_image(url: str, prompt: str):
     }
 
     res = requests.post(interior_url, headers=headers, data=payload)
+    print(res.json())
     
     if res.status_code == 200:
         return (res.json())["output"][0]
@@ -116,12 +117,12 @@ if __name__ == "__main__":
     
     # style prompt generation
     interior_url = "https://modelslab.com/api/v5/interior"
-    image_url = "https://raw.githubusercontent.com/BangGguJaengE/backend/main/interior-generator/stabledesign/data/general_room/test_room_resize.jpg"
+    # image_url = "https://raw.githubusercontent.com/BangGguJaengE/backend/main/interior-generator/stabledesign/data/general_room/test_room_resize.jpg"
+    image_url = "https://storage.googleapis.com/bbangggujipggu/friends_room/a.jpeg"
     user_prompt = "기분이 좀 안좋아서 기분전환 하고 싶어.. 나는 핑쿠 좋아해. 나는 colorful 한 스타일을 원해."
     style_dict = generate_style_prompt(user_prompt)
     print(style_dict)
     style_prompt = ast.literal_eval(style_dict)["style_prompt"]
-    # style_prompt = "interior 3d render coastal style, with white walls, where the ceiling is curved, kitchen only with bottom cabinets, cabinets of light wood color. There's also a kitchen island with a golden faucet and in front a large white table with wodden chairs with two black bowls on the top. The sun is almost rising"
     print(style_prompt)
     
     # image generation
