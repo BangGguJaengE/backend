@@ -21,7 +21,6 @@ def generate_interior_image(url: str, prompt: str):
     }
 
     res = requests.post(interior_url, headers=headers, data=payload)
-    print(res.json())
     
     if res.status_code == 200:
         return (res.json())["output"][0]
@@ -95,8 +94,8 @@ def generate_style_prompt(user_prompt: str):
         - 우울감 : combination of warm white light with blue–yellow or green–yellow light
         - 슬픔 : warm white light
         - 스트레스 : cool white light and blue-green light
-    - colorful 스타일을 원하는 경우, colorful 라는 단어는 절대 넣지 말고, green sofa 혹은 pink chair 같이 특정 가구나 소품에만 색깔 포인트를 넣어주세요.
-    - planterior 스타일을 원하는 경우, planterior 라는 단어는 절대 넣지 말고, with 1 minimal plants 만 추가해주세요.
+    - colorful 이라는 단어가 입력에 포함된 경우, colorful 라는 단어는 절대 넣지 말고, A simple room with dark red sofa 혹은 pink chair 같이 특정 가구나 소품에만 색깔 포인트를 넣어주세요.
+    - planterior 이라는 단어가 입력에 포함된 경우, planterior 라는 단어는 절대 넣지 말고, with 1 minimal plants 만 추가해주세요.
     """
     
     try:
@@ -118,8 +117,9 @@ if __name__ == "__main__":
     # style prompt generation
     interior_url = "https://modelslab.com/api/v5/interior"
     # image_url = "https://raw.githubusercontent.com/BangGguJaengE/backend/main/interior-generator/stabledesign/data/general_room/test_room_resize.jpg"
-    image_url = "https://storage.googleapis.com/bbangggujipggu/friends_room/a.jpeg"
-    user_prompt = "기분이 좀 안좋아서 기분전환 하고 싶어.. 나는 핑쿠 좋아해. 나는 colorful 한 스타일을 원해."
+    test_num = "12"
+    image_url = f"https://raw.githubusercontent.com/BangGguJaengE/backend/main/interior-generator/stabledesign/data/general_room/open_test/resized/{test_num}.png"
+    user_prompt = "소녀소녀한 방. 나는 minimal 한 스타일을 원해."
     style_dict = generate_style_prompt(user_prompt)
     print(style_dict)
     style_prompt = ast.literal_eval(style_dict)["style_prompt"]
