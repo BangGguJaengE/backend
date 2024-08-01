@@ -28,7 +28,7 @@ class ObjectDetection:
                     "features": [
                         {
                             "type": "OBJECT_LOCALIZATION",
-                            "maxResults": 20
+                            "maxResults": 100
                         }
                     ],
                     'imageContext': {
