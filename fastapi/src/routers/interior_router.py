@@ -32,11 +32,11 @@ async def generate_interior(body: Prompt):
 
     gen_image_url = await generate_interior_image(url, prompt)
 
-    await upload_url_image_to_gcs(gen_image_url)
+    gen_image_gcs_url = await upload_url_image_to_gcs(gen_image_url)
 
     res = await detect_obj_and_search(gen_image_url)
 
-    return {"generatedImageUrl": gen_image_url, "result": res}
+    return {"generatedImageUrl": gen_image_gcs_url, "result": res}
 
 @router.post("/gcp")
 async def upload_image(file: UploadFile = File(...)):
@@ -56,7 +56,7 @@ async def test(body: Prompt):
     prompt = body.prompt
 
     return {
-  "generatedImageUrl": "https://d9jy2smsrdjcq.cloudfront.net/generations/0-ebb56320-eba3-4dae-b03e-8bc32971e19a.png",
+  "generatedImageUrl": "https://storage.googleapis.com/bbangggujipggu/generated_image/2024-07-30T16-16-21-376515",
   "result": [
     {
       "label": "소파",
