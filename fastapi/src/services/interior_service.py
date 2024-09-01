@@ -2,6 +2,7 @@ import json
 from google.cloud import storage
 from google.auth import load_credentials_from_file
 from openai import OpenAI
+# import openai
 from PIL import Image, ImageFile
 from dotenv import load_dotenv
 import datetime
@@ -25,6 +26,60 @@ interior_url = os.getenv("INTERIOR_URL")
 interior_api_key = os.getenv("INTERIOR_API_KEY")
 
 open_ai_key = os.getenv("OPENAI_KEY")
+
+async def b():
+    client = OpenAI(api_key=open_ai_key)
+
+    # prompt = """
+    
+    # ### Role
+    # - 당신은 세계 최고의 홍보 포스터 제작자입니다. 서비스에 대한 입력을 받으면, 어떤식으로 홍보 포스터를 그려야하는지 잘 알고 있습니다.
+
+    # ### Objective
+    # - user의 입력을 바탕으로, 홍보 포스터를 png 형식으로 제작해주세요.
+
+    # user_input : 
+    # """
+
+    prompt = """
+    
+    """
+
+    # openai.api_key = open_ai_key
+    
+    # response = openai.Image.create(
+    #     prompt=prompt,
+    #     n=1,
+    #     size="1024x1024"
+    # )
+
+    # img_url = response["data"][0]["url"]
+
+    # return img_url
+
+    response = client.images.generate(
+        prompt=prompt,
+        n=1,
+        size="1024x1024",
+        # model="dell-e-3",
+    )
+
+    print("response")
+    print(response)
+
+    return response.data[0].url
+    
+    # try:
+    #     response = client.chat.completions.create(
+    #     model="gpt-4o",
+    #     messages=[
+    #         {"role": "system", "content": prompt},
+    #         {"role": "user", "content": "user_input : 우울한 청년을 대상으로 인테리어 생성, 추천해주는 서비스인 '빵꾸집꾸'를 제목으로 해서 포스터로 만들어줘."}
+    #     ]
+    #     )
+    #     return response.choices[0].message.content
+    # except Exception as e:
+    #     return f"An error occurred: {e}"
 
 async def detect_obj_and_search(image_url):
     print("image url")

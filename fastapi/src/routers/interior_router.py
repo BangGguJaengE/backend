@@ -6,20 +6,31 @@ interior_router = router = APIRouter()
 
 class Prompt(BaseModel):
     prompt: str
+    img_url: str
+
+@router.post("/upload")
+async def upload_img(file: UploadFile = File(...)):
+    url_dict = await upload_image_to_gcs(file)
+
+    return url_dict
 
 
 @router.post("/generate")
-async def generate_interior(body: str = Form(...), file: UploadFile = File(...)):
-    url_dict = await upload_image_to_gcs(file)
-    url = url_dict["url"]
+async def generate_interior(body: Prompt):
+    # url_dict = await upload_image_to_gcs(file)
+    # url = url_dict["url"]
     
-    prompt = Prompt(**json.loads(body))
+    url = body.img_url
+
+    # prompt = Prompt(**json.loads(body))
+
+    prompt = body.prompt
 
     print(url)
 
-    print(prompt.prompt)
+    print(prompt)
 
-    gen_image_url = await generate_interior_image(url, prompt.prompt)
+    gen_image_url = await generate_interior_image(url, prompt)
 
     await upload_url_image_to_gcs(gen_image_url)
 
@@ -40,9 +51,9 @@ async def upload_image_url(image_url: str):
     return res
 
 @router.post("/test")
-async def test(body: str = Form(...), file: UploadFile = File(...)):
+async def test(body: Prompt):
 
-    prompt = Prompt(**json.loads(body))
+    prompt = body.prompt
 
     return {
   "generatedImageUrl": "https://d9jy2smsrdjcq.cloudfront.net/generations/0-ebb56320-eba3-4dae-b03e-8bc32971e19a.png",
