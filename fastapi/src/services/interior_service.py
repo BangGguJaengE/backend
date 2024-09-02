@@ -23,7 +23,7 @@ credential = credentials[0]
 project_id = credentials[1]
 
 interior_url = os.getenv("INTERIOR_URL")
-interior_api_key = os.getenv("INTERIOR_API_KEY")
+interior_api_keys = os.getenv("INTERIOR_API_KEYS")
 
 open_ai_key = os.getenv("OPENAI_KEY")
 
@@ -257,27 +257,49 @@ async def generate_interior_image(url: str, prompt: str):
         style_dict = generate_style_prompt(prompt)
         styled_prompt = ast.literal_eval(style_dict)["style_prompt"]
 
-    payload = json.dumps({
-        "key": interior_api_key,
-        "init_image" : url,
-        "prompt" : styled_prompt,
-        "num_inference_steps" : 21,
-        "base64" : "no",
-        "guidance_scale" : 7,
-    })
+    api_keys = interior_api_keys.split(",")
+    print(api_keys)
 
+    key = api_keys.pop()
+
+    res = _send_interior_api(key, url, styled_prompt)
+    while res == "fail" or len(api_keys) == 0:
+        key = api_keys.pop()
+        print(key)
+        res = _send_interior_api(key, url, styled_prompt)
+
+    return res
+
+    
+def _send_interior_api(interior_api_key: str, url: str, styled_prompt: str):
+    payload = json.dumps({
+            "key": interior_api_key,
+            "init_image" : url,
+            "prompt" : styled_prompt,
+            "num_inference_steps" : 21,
+            "base64" : "no",
+            "guidance_scale" : 7,
+        })
+    
     headers = {
         'Content-Type': 'application/json'
     }
 
-    res = requests.post(interior_url, headers=headers, data=payload)
+    try :
+        res = requests.post(interior_url, headers=headers, data=payload)
 
-    if res.status_code == 200:
+        if res.status_code == 200:
 
-        return (res.json())["output"][0]
+            return (res.json())["output"][0]
+        raise HTTPException(status_code=400, detail="Something Wrong")
+    except Exception as e:
+        pass
+
+    return "fail"    
     
-    raise HTTPException(status_code=400, detail="Something Wrong")
     
+
+
 def generate_style_prompt(user_prompt: str):
     client = OpenAI(api_key=open_ai_key)
 
