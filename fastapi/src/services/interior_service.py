@@ -263,7 +263,7 @@ async def generate_interior_image(url: str, prompt: str):
     key = api_keys.pop()
 
     res = _send_interior_api(key, url, styled_prompt)
-    while res == "fail" or len(api_keys) == 0:
+    while res == "fail" and len(api_keys) > 0:
         key = api_keys.pop()
         print(key)
         res = _send_interior_api(key, url, styled_prompt)
@@ -293,6 +293,7 @@ def _send_interior_api(interior_api_key: str, url: str, styled_prompt: str):
             return (res.json())["output"][0]
         raise HTTPException(status_code=400, detail="Something Wrong")
     except Exception as e:
+        print(e)
         pass
 
     return "fail"    
